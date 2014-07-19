@@ -18,7 +18,7 @@ supports the [CouchApp File System Mapping](https://github.com/couchapp/couchapp
 ```
 var annotator = $('#content').annotator();
 annotator.annotator('addPlugin', 'Store', {
-  prefix: 'http://localhost:5984/annotator/_design/annotations/_rewrite'
+  prefix: 'http://localhost:5984/annotator/_design/annotator/_rewrite'
 });
 ```
 
