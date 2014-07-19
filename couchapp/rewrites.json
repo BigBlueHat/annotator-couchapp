@@ -1,0 +1,17 @@
+[
+  {
+    "from": "/",
+    "to": "../../api"
+  },
+  {
+    "from": "annotations",
+    "to": "_list/api/annotations",
+    "query": {
+      "include_docs": "true"
+    }
+  },
+  {
+    "from": ":id",
+    "to": "../../:id"
+  }
+]
