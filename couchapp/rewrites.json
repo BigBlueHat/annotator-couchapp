@@ -1,14 +1,23 @@
 [
   {
     "from": "/",
-    "to": "../../api"
+    "to": "api.json"
   },
   {
     "from": "annotations",
     "to": "_list/api/annotations",
     "query": {
+      "reduce": "false",
       "include_docs": "true"
     }
+  },
+  {
+    "from": ":file.js",
+    "to": ":file.js"
+  },
+  {
+    "from": ":file.css",
+    "to": ":file.css"
   },
   {
     "from": ":id",
