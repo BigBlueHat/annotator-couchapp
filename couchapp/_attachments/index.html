@@ -118,6 +118,14 @@
         return {
           onBeforeAnnotationCreated: function(annotation) {
             annotation.uri = location.href;
+          },
+          onAnnotationUpdated: function(ann) {
+            Annotator.Util.$.ajax('http://localhost:5984/annotations/_design/annotator/_rewrite/annotations/' + ann._id, {
+              type: 'HEAD'
+            }).done(function(data, text, resp) {
+              ann._rev = resp.getResponseHeader('ETag').slice(1,-1);
+              return ann;
+            });
           }
         }
       });
