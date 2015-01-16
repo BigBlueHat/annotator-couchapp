@@ -4,7 +4,21 @@
     "to": "api.json"
   },
   {
+    "method": "POST",
     "from": "annotations",
+    "to": "../../"
+  },
+  {
+    "method": "PUT",
+    "from": "annotations/:id",
+    "to": "_update/annotation/:id"
+  },
+  {
+    "from": "annotations/:id",
+    "to": "../../:id"
+  },
+  {
+    "from": "search",
     "to": "_list/api/annotations",
     "query": {
       "reduce": "false",
@@ -18,9 +32,5 @@
   {
     "from": ":file.css",
     "to": ":file.css"
-  },
-  {
-    "from": ":id",
-    "to": "../../:id"
   }
 ]

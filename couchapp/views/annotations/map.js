@@ -1,5 +1,5 @@
 function(doc) {
-  if ('ranges' in doc) {
-    emit(null, 1);
+  if ('uri' in doc && 'ranges' in doc) {
+    emit(doc.uri, 1);
   }
 }

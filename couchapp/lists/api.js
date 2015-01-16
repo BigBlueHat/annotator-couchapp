@@ -12,5 +12,5 @@ function(head, req) {
     tmpdoc['id'] = tmpdoc._id;
     rows.push(tmpdoc);
   }
-  send(JSON.stringify(rows));
+  send(JSON.stringify({rows: rows}));
 }
