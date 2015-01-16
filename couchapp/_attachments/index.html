@@ -126,7 +126,7 @@
           prefix: 'http://localhost:5984/annotations/_design/annotator/_rewrite'
         });
       });
-      anno.registry.annotations.load();
+      anno.registry.annotations.load({key: '"' + location.href + '"'});
     </script>
   </body>
 
