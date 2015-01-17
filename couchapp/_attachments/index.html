@@ -111,12 +111,12 @@
     <script src="annotator.js"></script>
     <script src="annotator-pouchdb.js"></script>
     <script>
-      var Annotator = require('annotator'),
-          PouchDBStorage = require('annotator-pouchdb').PouchDBStorage,
-          elem = document.getElementById('airlock'),
-          anno = new Annotator(elem),
-          db = new PouchDB(location.protocol + '//' + location.hostname + ':'
+      var Annotator = require('annotator');
+      var PouchDBStorage = require('annotator-pouchdb').PouchDBStorage;
+      var db = new PouchDB(location.protocol + '//' + location.hostname + ':'
             + location.port + '/' + location.pathname.split('/')[1]);
+      var elem = document.getElementById('airlock');
+      var anno = new Annotator(elem);
 
       anno.addPlugin(function() {
         return {
