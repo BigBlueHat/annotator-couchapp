@@ -113,8 +113,9 @@
     <script>
       var Annotator = require('annotator');
       var PouchDBStorage = require('annotator-pouchdb').PouchDBStorage;
-      var db = new PouchDB(location.protocol + '//' + location.hostname + ':'
-            + location.port + '/' + location.pathname.split('/')[1]);
+/*      var db = new PouchDB(location.protocol + '//' + location.hostname + ':'
+            + location.port + '/' + location.pathname.split('/')[1]);*/
+      var db = new PouchDB('annotator-offline');
       var elem = document.getElementById('airlock');
       var anno = new Annotator(elem);
 
@@ -126,6 +127,24 @@
         }
       });
       anno.setStorage(function() {
+        var ddoc = {
+          _id: '_design/annotator',
+          views: {
+            annotations: {
+              map: "function(doc) {\
+                if ('uri' in doc && 'ranges' in doc) {\
+                  emit(doc.uri, 1);\
+                }\
+              }"
+            }
+          }
+        };
+        db.put(ddoc)
+          .catch(function(err) {
+            // likely this is "just" a conflict...
+            // TODO: if the ddoc changes, make this work
+            console.error(err);
+          });
         return new PouchDBStorage(db);
       });
       anno.registry.annotations.load({key: location.href});
