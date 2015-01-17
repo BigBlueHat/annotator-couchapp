@@ -1,0 +1,13 @@
+{
+  "name": "annotator-pouchdb",
+  "version": "0.0.1",
+  "description": "Annotator Storage with PouchDB (and/or CouchDB)",
+  "author": "BigBlueHat",
+  "main": "src/index.js",
+  "dependencies": {
+    "annotator-plugintools": "~1.0.0"
+  },
+  "scripts": {
+    "dev": "browserify -x annotator -r ./src/index:annotator-pouchdb > couchapp/_attachments/annotator-pouchdb.js"
+  }
+}

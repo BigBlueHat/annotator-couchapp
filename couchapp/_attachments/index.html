@@ -107,34 +107,28 @@
       </table>
     </div>
 
-    <script src="lib/annotator.js"></script>
-
+    <script src="pouchdb.js"></script>
+    <script src="annotator.js"></script>
+    <script src="annotator-pouchdb.js"></script>
     <script>
       var Annotator = require('annotator'),
+          PouchDBStorage = require('annotator-pouchdb').PouchDBStorage,
           elem = document.getElementById('airlock'),
-          anno = new Annotator(elem);
+          anno = new Annotator(elem),
+          db = new PouchDB(location.protocol + '//' + location.hostname + ':'
+            + location.port + '/' + location.pathname.split('/')[1]);
 
       anno.addPlugin(function() {
         return {
           onBeforeAnnotationCreated: function(annotation) {
             annotation.uri = location.href;
-          },
-          onAnnotationUpdated: function(ann) {
-            Annotator.Util.$.ajax('http://localhost:5984/annotations/_design/annotator/_rewrite/annotations/' + ann._id, {
-              type: 'HEAD'
-            }).done(function(data, text, resp) {
-              ann._rev = resp.getResponseHeader('ETag').slice(1,-1);
-              return ann;
-            });
           }
         }
       });
       anno.setStorage(function() {
-        return new Annotator.Storage.HTTPStorage({
-          prefix: 'http://localhost:5984/annotations/_design/annotator/_rewrite'
-        });
+        return new PouchDBStorage(db);
       });
-      anno.registry.annotations.load({key: '"' + location.href + '"'});
+      anno.registry.annotations.load({key: location.href});
     </script>
   </body>
 
