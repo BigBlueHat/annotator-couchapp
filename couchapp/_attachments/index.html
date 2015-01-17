@@ -131,11 +131,11 @@
           _id: '_design/annotator',
           views: {
             annotations: {
-              map: "function(doc) {\
-                if ('uri' in doc && 'ranges' in doc) {\
-                  emit(doc.uri, 1);\
-                }\
-              }"
+              map: function(doc) {
+                if ('uri' in doc && 'ranges' in doc) {
+                  emit(doc.uri, 1);
+                }
+              }.toString()
             }
           }
         };
