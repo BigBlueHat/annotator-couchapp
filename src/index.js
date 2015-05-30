@@ -1,6 +1,5 @@
 "use strict";
 
-var $ = require('annotator').util.$;
 var PouchDB = require('pouchdb');
 window.PouchDB = PouchDB;
 
@@ -32,50 +31,50 @@ function PouchDBStorage (options) {
 
   return {
     'create': function (annotation) {
-      var dfd = $.Deferred();
       annotation.id = PouchDB.utils.uuid();
       annotation._id = annotation.id;
-      db.post(annotation, function(err, resp) {
-        annotation._rev = resp.rev;
-        dfd.resolve(annotation);
-      });
-      return dfd;
+      return db.post(annotation)
+        .then(function(resp) {
+          annotation._rev = resp.rev;
+          return annotation;
+        })
+        .catch(console.log.bind(console));
     },
 
     'update': function (annotation) {
-      var dfd = $.Deferred();
-      db.put(annotation, function(err, resp) {
-        annotation._rev = resp.rev;
-        dfd.resolve(annotation);
-      });
-      return dfd;
+      return db.put(annotation)
+        .then(function(resp) {
+          annotation._rev = resp.rev;
+          return annotation;
+        })
+        .catch(console.log.bind(console));
     },
 
     'delete': function (annotation) {
-      var dfd = $.Deferred();
-      db.remove(annotation, function(err, resp) {
-        dfd.resolve(annotation);
-      });
-      return dfd;
+      return db.remove(annotation)
+        .then(function(resp) {
+          return annotation;
+        })
+        .catch(console.log.bind(console));
     },
 
     'query': function (queryObj) {
-      var dfd = $.Deferred();
-      db.query('annotator/annotations',
-        $.extend({reduce: false, include_docs: true}, queryObj),
-        function(err, resp) {
+      queryObj.reduce = false;
+      queryObj.include_docs = true;
+      return db.query('annotator/annotations', queryObj)
+        .then(function(resp) {
           var annotations = [];
           for (var i = 0; i < resp.rows.length; i++) {
             annotations.push(resp.rows[i].doc);
           }
-          dfd.resolve({
+          return {
             results: annotations,
             metadata: {
               total: resp.rows.length
             }
-          });
-        });
-      return dfd.promise();
+          };
+        })
+        .catch(console.log.bind(console));
     }
   };
 }
