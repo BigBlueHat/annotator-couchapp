@@ -1,11 +1,35 @@
 "use strict";
 
-var Annotator = require('annotator-plugintools').Annotator;
-var $ = Annotator.Util.$;
+var $ = require('annotator').util.$;
+var PouchDB = require('pouchdb');
+window.PouchDB = PouchDB;
 
 // PouchDBStorage is a storage component that uses PouchDB to store annotations
 // in the browser and synchronize them to a remote CouchDB instance.
-function PouchDBStorage (db) {
+function PouchDBStorage (options) {
+  // db is now a string; upgrade it to a PouchDB
+  var db = PouchDB(options);
+  // by URI filtering
+  var ddoc = {
+    _id: '_design/annotator',
+    views: {
+      annotations: {
+        map: function(doc) {
+          if ('uri' in doc && 'ranges' in doc) {
+            emit(doc.uri, 1);
+          }
+        }.toString()
+      }
+    }
+  };
+  db.put(ddoc)
+    .catch(function(err) {
+      if (err.status !== 409) {
+        throw err;
+      }
+      // ignore if doc already exists
+    });
+
   return {
     'create': function (annotation) {
       var dfd = $.Deferred();
@@ -56,4 +80,12 @@ function PouchDBStorage (db) {
   };
 }
 
-exports.PouchDBStorage = PouchDBStorage;
+// `options` are straight-up PouchDB options at this point
+exports.pouch = function pouch(options) {
+  var storage = new PouchDBStorage(options);
+  return {
+    configure: function (registry) {
+      registry.registerUtility(storage, 'storage');
+    }
+  };
+};

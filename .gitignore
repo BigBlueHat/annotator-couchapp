@@ -1,0 +1,3 @@
+node_modules
+couchapp/_attachments/annotator.js
+couchapp/_attachments/annotator-pouchdb.js

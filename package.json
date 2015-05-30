@@ -5,9 +5,11 @@
   "author": "BigBlueHat",
   "main": "src/index.js",
   "dependencies": {
-    "annotator-plugintools": "~1.0.0"
+    "pouchdb": "~3.5.0",
+    "annotator": "~2.0.0-alpha.2"
   },
   "scripts": {
+    "anno": "browserify -r ./node_modules/annotator/browser:annotator > couchapp/_attachments/annotator.js",
     "dev": "browserify -x annotator -r ./src/index:annotator-pouchdb > couchapp/_attachments/annotator-pouchdb.js"
   }
 }
